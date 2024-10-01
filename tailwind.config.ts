@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-import { pxToRemTailwind } from '@/styles/pxToRem';
+import { pxToRemTailwind } from './src/styles/pxToRem';
 
 const config: Config = {
   content: [
