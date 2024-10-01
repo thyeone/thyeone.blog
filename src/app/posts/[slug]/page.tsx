@@ -1,7 +1,7 @@
 import PostBodyMDX from '@/components/PostBody';
-import { getPostDetail } from '@/lib/getPostList';
+import { getPostDetail } from '@/lib/post';
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
+export default async function PostDetailPage({ params }: { params: { slug: string } }) {
   const post = await getPostDetail('posts', params.slug);
 
   return <PostBodyMDX content={post.content} />;
