@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function Header() {
   return (
     <>
-      <header className='w-full fixed inset-x-0 top-0'>
+      <header className='w-full fixed inset-x-0 top-0 bg-white z-50'>
         <Flex as='nav' align='center' justify='space-between' className='w-full h-64 max-w-pc px-16 mx-auto'>
           <Link href='/'>
             <Avatar ignoreFallback src='https://avatars.githubusercontent.com/u/48711263?v=4' size='sm' />
