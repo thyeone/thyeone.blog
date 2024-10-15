@@ -19,7 +19,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          <Box as='main' className='w-full transition duration-300 max-w-pc mx-auto min-h-[calc(100dvh-64px)] p-16'>
+          <Box as='main' className='w-full max-w-pc mx-auto min-h-[calc(100dvh-64px)] p-16'>
             {children}
           </Box>
         </Providers>

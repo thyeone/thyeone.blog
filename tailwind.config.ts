@@ -12,7 +12,10 @@ const config: Config = {
       ...pxToRemTailwind,
     },
     maxWidth: {
-      pc: '1024px',
+      pc: '768px',
+    },
+    screens: {
+      phone: '480px',
     },
   },
   plugins: [],
