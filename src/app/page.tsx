@@ -25,12 +25,12 @@ export default async function Home() {
         </div>
         <Stack>
           <p className='text-3xl font-bold'>김태현</p>
-          <Flex className='mt-auto'>
+          <Flex className='mt-auto gap-8'>
             <Tooltip label='GitHub' hasArrow>
               <a
                 href='https://github.com/thyeone'
                 target='_blank'
-                className='rounded p-4 transition duration-300 hover:bg-[rgba(0,0,0,0.08)]'
+                className='rounded p-1 transition duration-300 hover:bg-[rgba(0,0,0,0.08)]'
               >
                 <GitHub />
               </a>
@@ -39,7 +39,7 @@ export default async function Home() {
               <a
                 href='https://drive.google.com/file/d/1-ZDkotRA7pn2B_EAS3mH9vwdhA9BLqW0/view'
                 target='_blank'
-                className='rounded p-4 transition duration-300 hover:bg-[rgba(0,0,0,0.08)]'
+                className='rounded p-1 transition duration-300 hover:bg-[rgba(0,0,0,0.08)]'
               >
                 <Resume />
               </a>
@@ -57,11 +57,11 @@ export default async function Home() {
             className='flex phone:flex-row group gap-24 flex-col-reverse phone:items-center w-full'
           >
             <div className='flex flex-col flex-1'>
-              <span className='text-xl font-bold group-hover:text-teal-600 transition'>{title}</span>
-              <span className='mt-8 text-base text-gray-500'>{description}</span>
-              <span className='mt-16 text-sm text-gray-500'>{dayjs(date).format('YYYY년 MM월 DD일')}</span>
+              <span className='text-2xl font-bold group-hover:text-teal-600 transition'>{title}</span>
+              <span className='mt-8 text-sm text-gray-500'>{description}</span>
+              <span className='mt-16 text-xs text-gray-500'>{dayjs(date).format('YYYY년 MM월 DD일')}</span>
             </div>
-            <div className='relative rounded-16 shrink-0 w-full h-200 phone:aspect-square phone:size-180 overflow-hidden'>
+            <div className='relative rounded-10 phone:rounded-12 shrink-0 w-full h-200 phone:aspect-square phone:size-180 overflow-hidden'>
               <Image
                 src={thumbnail}
                 fill
