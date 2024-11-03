@@ -36,7 +36,14 @@ export default function NavTabs() {
             {label}
           </Link>
           {isActive(href) && (
-            <ChakraMotion layoutId='font-bold' bg='teal.600' className='w-full absolute bg-white bottom-0 h-2 left-0' />
+            <ChakraMotion
+              layoutId='font-bold'
+              bg='teal.600'
+              className='w-full absolute bg-white bottom-0 h-2 left-0'
+              style={{
+                originY: 0,
+              }}
+            />
           )}
         </ListItem>
       ))}

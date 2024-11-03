@@ -5,6 +5,56 @@ description: 설명설명설명설명설명설명설명설명설명설명설명�
 thumbnail: /posts/test/thumbnail.jpg
 ---
 
-#### 제목1
+## Tabs Component
 
-안녕하세요. **내용**입니다.
+### 요구사항
+
+1. 하단 시연 영상과 같이 탭을 클릭했을 때 선택된 요소로 인디케이터가 이동합니다. 즉, 동일한 형태와 애니메이션이 적용되어 있어야 해요.
+2. 선택된 Tab에 따라 알맞은 항목을 보여주어야 합니다. 그러기 위해서는 다른 컴포넌트와 **Tab**의 `상태`를 공유할 수 있어야 합니다.
+
+<img src='https://velog.velcdn.com/images/thkim/post/8cdc1b72-e8b2-4f2c-85be-acf71d82f372/image.gif' width='300px' />
+
+---
+
+### Step1 - 상태를 공유할 수 있는 Provider 생성하기
+
+트리에 걸쳐서 선택된 탭의 상태를 공유할 수 있도록 먼저 Provider를 생성합니다.
+
+```tsx
+'use client';
+
+import { createContext, useContext, useMemo, useState } from 'react';
+
+type TabContextValue = {
+  selectedTab: string;
+  setSelectedTab: (value: string) => void;
+};
+
+type TabProviderProps = {
+  initialValue: string;
+};
+
+const TabContext = createContext<TabContextValue | null>(null);
+
+export default function TabProvider({ children, initialValue }: PropsWithStrictChildren<TabProviderProps>) {
+  const [selectedTab, setSelectedTab] = useState<string>(initialValue);
+
+  const memoizedValue = useMemo(
+    () => ({
+      selectedTab,
+      setSelectedTab,
+    }),
+    [selectedTab]
+  );
+
+  return <TabContext.Provider value={memoizedValue}>{children}</TabContext.Provider>;
+}
+
+export function useTabContext() {
+  const tabContext = useContext(TabContext);
+
+  if (!tabContext) throw new Error('부모 트리에서 TabContext를 사용해주세요.');
+
+  return { ...tabContext };
+}
+```

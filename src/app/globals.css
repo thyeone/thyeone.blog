@@ -10,3 +10,18 @@
     'Segoe UI Symbol', sans-serif;
   @apply antialiased;
 }
+
+:not(pre) > code {
+  font-weight: inherit !important;
+  font-size: 14px;
+  border: 1px solid var(--chakra-colors-chakra-border-color);
+  background: var(--chakra-colors-chakra-subtle-bg);
+  color: var(--chakra-colors-chakra-body-text);
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+:not(pre) > code::before,
+:not(pre) > code::after {
+  content: '' !important;
+}
