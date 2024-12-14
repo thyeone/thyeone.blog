@@ -7,7 +7,7 @@ export default function DarkModeSwitch() {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <Button variant='ghost' size='md' onClick={toggleColorMode} className='ml-auto'>
+    <Button variant='ghost' size='md' onClick={toggleColorMode} position='absolute' right={4}>
       {colorMode === 'light' ? <SunIcon /> : <MoonIcon />}
     </Button>
   );

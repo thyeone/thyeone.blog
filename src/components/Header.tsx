@@ -10,7 +10,7 @@ export default function Header() {
         <Flex
           as='nav'
           align='center'
-          justify='space-between'
+          justify='center'
           className='w-full relative h-64 inset-x-0 z-50 max-w-pc px-16 mx-auto'
         >
           <NavTabs />

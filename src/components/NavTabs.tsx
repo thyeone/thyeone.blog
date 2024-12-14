@@ -24,7 +24,7 @@ export default function NavTabs() {
   const isActive = (path: string) => `/${pathname.split('/')[1]}` === path;
 
   return (
-    <List display='flex' alignItems='center' gap='24px' className='ml-auto'>
+    <List display='flex' alignItems='center' gap='24px'>
       {nav_links.map(({ href, label }) => (
         <ListItem key={href} position='relative' className='px-16 flex items-center justify-center py-6 z-10'>
           <Link
