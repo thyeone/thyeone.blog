@@ -3,11 +3,13 @@ import Providers from '@/providers/Providers';
 import { Box } from '@chakra-ui/react';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import ChakraMotion from '@/components/ChakraMotion';
 
 export const metadata: Metadata = {
-  title: 'TaeHyeon Dev Blog',
-  description: 'TaeHyeon Dev Blog',
+  title: 'thyeone.blog',
+  description: 'thyeone.blog',
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export const viewport: Viewport = {
