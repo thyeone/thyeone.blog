@@ -1,4 +1,6 @@
-import { As, chakra, shouldForwardProp } from '@chakra-ui/react';
+'use client';
+
+import { chakra, shouldForwardProp } from '@chakra-ui/react';
 import { isValidMotionProp, motion } from 'framer-motion';
 
 const ChakraMotion = chakra(motion.div, {

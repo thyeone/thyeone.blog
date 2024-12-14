@@ -1,8 +1,9 @@
+import Header from '@/components/Header';
+import Providers from '@/providers/Providers';
+import { Box } from '@chakra-ui/react';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import Providers from '@/providers/Providers';
-import Header from '@/components/Header';
-import { Box } from '@chakra-ui/react';
+import ChakraMotion from '@/components/ChakraMotion';
 
 export const metadata: Metadata = {
   title: 'TaeHyeon Dev Blog',
