@@ -10,9 +10,9 @@ const Giscus = () => {
 
   const giscusConfig: GiscusProps = {
     repo: 'thyeone/thyeone.blog',
-    repoId: 'R_kgDOKXQbJQ',
+    repoId: 'R_kgDOM5O_EA',
     category: 'General',
-    categoryId: 'DIC_kwDOKXQbJc4CZ4HM',
+    categoryId: 'DIC_kwDOM5O_EM4ClOlN',
     mapping: 'pathname',
     strict: '0',
     reactionsEnabled: '1',
