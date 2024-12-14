@@ -55,7 +55,7 @@ export const getPostList = async (category?: string): Promise<Post[]> => {
   const paths: string[] = getPostPaths(category);
 
   const posts = await Promise.all(paths.map((postPath) => parsePost(postPath)));
-  return posts;
+  return sortPostList(posts);
 };
 
 export const getCategoryList = () => {

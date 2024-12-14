@@ -11,4 +11,5 @@ type Post = PostMatter & {
   slug: string;
   category: string;
   content: string;
+  readingMinutes: number;
 };

@@ -19,14 +19,17 @@
     "dayjs": "^1.11.13",
     "framer-motion": "^11.9.0",
     "gray-matter": "^4.0.3",
+    "lucide-react": "^0.468.0",
     "next": "^14.2.13",
     "next-mdx-remote": "^5.0.0",
     "react": "^18",
     "react-dom": "^18",
     "reading-time": "^1.5.0",
+    "rehype-pretty-code": "^0.14.0",
     "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
     "@types/glob": "^8.1.0",
     "@types/node": "^20",
     "@types/react": "^18",

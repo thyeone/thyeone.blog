@@ -19,7 +19,7 @@ export default async function Home() {
             fill
             placeholder='blur'
             alt='avatar'
-            className='obejct-cover'
+            objectFit='cover'
             blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII='
           />
         </div>
@@ -49,7 +49,7 @@ export default async function Home() {
       </Flex>
       <Divider className='my-24' />
       <p className='font-bold text-xl'>최근 포스트</p>
-      <Stack marginTop='24px'>
+      <Stack marginTop={2}>
         {postList.slice(0, 3).map(({ url, title, description, date, thumbnail }, index) => (
           <Link
             key={index}

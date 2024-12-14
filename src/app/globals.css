@@ -1,14 +1,23 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+@import url('https://fonts.cdnfonts.com/css/jetbrains-mono');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* {
+html {
   font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
     'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', sans-serif;
   @apply antialiased;
+  font-size: 16px;
+}
+
+ol {
+  list-style-type: decimal;
+  ::marker {
+    font-weight: 500;
+  }
 }
 
 :not(pre) > code {
@@ -24,4 +33,23 @@
 :not(pre) > code::before,
 :not(pre) > code::after {
   content: '' !important;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 16px 0;
+}
+pre [data-line] {
+  padding: 0 16px;
+  font-size: 13px;
+}
+
+[data-rehype-pretty-code-title] {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border: 1px solid #8b8b8b;
+  border-top-left-radius: 0.4rem;
+  border-top-right-radius: 0.4rem;
+  border-bottom-style: none;
 }

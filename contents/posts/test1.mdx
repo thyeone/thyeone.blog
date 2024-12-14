@@ -1,7 +1,7 @@
 ---
-title: '테스트 제목'
-date: 2024-09-20
-description: 설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설
+title: Compound Pattern으로 추상화된 컴포넌트 구현해보기
+description: 컴포넌트를 유연하게 설계해보자
+date: 2024-05-07
 thumbnail: /posts/test/thumbnail.jpg
 ---
 
@@ -58,3 +58,169 @@ export function useTabContext() {
   return { ...tabContext };
 }
 ```
+
+### Step2 - Compound Pattern을 적용한 Tabs 구현하기
+
+```tsx
+'use client';
+
+import { motion } from 'framer-motion';
+
+import { cn } from '@/utils';
+
+import Spacing from '../Spacing';
+import { useTabContext } from './TabProvider';
+
+export default function Tabs({ children }: PropsWithStrictChildren) {
+  return (
+    <>
+      <nav className='max-width fixed z-10 w-full border-b border-gray-200 bg-white pt-4'>{children}</nav>
+      <Spacing size={54} />
+    </>
+  );
+}
+
+function List({ children }: PropsWithStrictChildren) {
+  return <motion.ul className='ml-[23px] flex items-center h-full gap-x-5'>{children}</motion.ul>;
+}
+
+function Item({ value, name }: { value: string; name: string }) {
+  const { selectedTab, setSelectedTab } = useTabContext();
+
+  return (
+    <motion.li
+      className={cn('cursor-pointer text-gray-500', {
+        'font-bold text-gray-900': value === selectedTab,
+      })}
+      onClick={() => setSelectedTab(value)}
+    >
+      {name}
+      {value === selectedTab && <Indicator />}
+    </motion.li>
+  );
+}
+
+function Panel({ children, tab }: PropsWithStrictChildren<{ tab: string }>) {
+  const { selectedTab } = useTabContext();
+  const isActive = selectedTab === tab;
+
+  return <>{isActive && children}</>;
+}
+
+Tabs.List = List;
+Tabs.Item = Item;
+Tabs.Panel = Panel;
+
+function Indicator() {
+  return <motion.div className='mt-3 h-px w-full bg-gray-900' layoutId='bg-gray-900' />;
+}
+```
+
+`Tabs`와 `List`의 구현을 통해 탭바의 기본 틀을 잡아줍니다. 그리고 Item에서는 클릭 이벤트 처리와 조건부 스타일링이 적용되고 있어요.
+
+`Panel`에서는 선택된 탭에 따라 조건이 일치한다면 children을 렌더링 하고 있죠.
+
+이 세 개의 컴포넌트를 `CCP`로 묶어줄게요.
+
+### Step3 - 사용하기
+
+이런 느낌으로 사용할 수 있습니다. 반복되는 코드를 작성할 필요 없이 높은 단계로 추상화가 되어 있어요.
+
+```tsx
+<TabProvider>
+  <Tabs>
+    <Tabs.List>
+      {TABS.map(({ id, name, value }) => (
+        <Tabs.Item key={id} name={name} value={value} />
+      ))}
+    </Tabs.List>
+  </Tabs>
+  <Tabs.Panel tab='receive'>
+    <ReceiveLikeSection />
+  </Tabs.Panel>
+  <Tabs.Panel tab='send'>
+    <SendLikeSection />
+  </Tabs.Panel>
+</TabProvider>
+```
+
+## Header Component
+
+![](https://velog.velcdn.com/images/thkim/post/8274215d-51ae-4d8e-863d-7dfb49867f54/image.png)
+
+보이는 사진 외에도 각기 다른 형태의 Header를 갖고 있어요.
+처음에는 페이지 별로 헤더 컴포넌트를 구성할 계획이였는데, 서비스 규모가 큰 편이여서 관리도 구현도 번거로워 질 것 같았습니다. 여전히 페이지 별로 헤더 컴포넌트를 구성하는 건 똑같지만 반복되는 스타일링을 생략할 수는 있었어요.
+
+### Header 재구현해보기
+
+```tsx
+import { type AnimationProps, type HTMLMotionProps } from 'framer-motion';
+import type { PropsWithChildren } from 'react';
+
+import Spacing from '@/components/Spacing';
+import { cn } from '@/utils/cn';
+
+import { MotionHeader } from '../Motion';
+
+export default function Header({
+  children,
+  className,
+  ...rest
+}: PropsWithChildren<HTMLMotionProps<'header'>> & AnimationProps) {
+  return (
+    <>
+      <MotionHeader
+        className={cn(
+          `max-width fixed inset-x-0 top-0 z-header mx-auto flex h-14 w-full items-center justify-between bg-white px-5`,
+          className
+        )}
+        {...rest}
+      >
+        {children}
+      </MotionHeader>
+      <Spacing size={56} />
+    </>
+  );
+}
+
+function Left({ children, className }: PropsWithChildren<{ className?: string }>) {
+  return <div className={cn('mr-auto flex items-center', className)}>{children}</div>;
+}
+
+function Center({ children, className }: PropsWithChildren<{ className?: string }>) {
+  return <span className={cn('absolute inset-x-0 text-center text-lg font-bold', className)}>{children}</span>;
+}
+
+function Right({ children, className }: PropsWithChildren<{ className?: string }>) {
+  return <div className={cn('ml-auto flex items-center', className)}>{children}</div>;
+}
+
+Header.Left = Left;
+Header.Center = Center;
+Header.Right = Right;
+```
+
+`Header`의 기본 틀 아래에 Left, Center, Right를 children으로 주입해주는 방식이에요. 스타일링도 오버라이딩 할 수 있습니다.
+
+### 사용하기
+
+```tsx
+export default function ProfileHeader() {
+  return (
+    <Header>
+      <Header.Center>내 프로필</Header.Center>
+      <Header.Right>
+        <button>
+          <CloseIcon />
+        </button>
+      </Header.Right>
+    </Header>
+  );
+}
+```
+
+## 마무리하며
+
+**Compound Pattern**을 몇번 적용하면서 느낀 점은 UI가 정해져 있지 않은 **Headless Component**에 적용했을 때 높은 재사용성을 가져올 수 있다는 것입니다.
+
+처음 개발할 때는 디자인 시안과 같은 형태 그리고 **문제 없이 잘 동작하는 기능 구현**에만 초점을 맞췄다면 이제는 **변경에 유연**하고 **추상화 단계**와 방법에 대한 깊은 고민을 하면서 컴포넌트를 작성하는 것 같습니다.

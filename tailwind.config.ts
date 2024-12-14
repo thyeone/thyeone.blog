@@ -18,6 +18,5 @@ const config: Config = {
       phone: '480px',
     },
   },
-  plugins: [],
 };
 export default config;
