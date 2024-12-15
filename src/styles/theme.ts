@@ -6,9 +6,29 @@ const config: ThemeConfig = {
   useSystemColorMode: true,
 };
 
+const components = {
+  Link: {
+    baseStyle: {
+      color: 'blue.600',
+      fontWeight: 'bold',
+      textDecoration: 'underline',
+      _hover: {
+        color: 'blue.800',
+      },
+    },
+  },
+};
+
 export const theme = extendTheme(
   {
     config,
+    components,
   },
-  withProse()
+  withProse({
+    baseStyle: (props: any) => ({
+      a: {
+        color: props.colorMode === 'dark' ? 'cyan.300' : 'blue.500',
+      },
+    }),
+  })
 );
