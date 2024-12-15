@@ -13,7 +13,7 @@ export default async function PostDetailPage({ params: { slug } }: { params: { s
   const post = await getPostDetail('posts', slug);
 
   return (
-    <ChakraMotion variants={staggerTwo} initial='initial' animate='animate'>
+    <ChakraMotion variants={staggerTwo} initial='hidden' animate='visible'>
       <ChakraMotion variants={fadeIn}>
         <Stack
           align='center'

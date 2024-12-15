@@ -18,13 +18,13 @@ export const fadeInOut: AnimationProps = {
 };
 
 export const staggerOne: Variants = {
-  animate: {
+  visible: {
     transition: { staggerChildren: 0.1 },
   },
 };
 
 export const staggerTwo: Variants = {
-  animate: {
+  visible: {
     transition: { staggerChildren: 0.6 },
   },
 };
