@@ -1,6 +1,6 @@
 ---
 title: IDE 컴파일을 느리게 만들었던 내장 타입
-description: JSX.IntrinsicElements 타입을 알아보자
+description: JSX.IntrinsicElements 타입은 뭘까
 date: 2024-12-16
 thumbnail: /posts/20241216.png
 ---
@@ -60,7 +60,7 @@ type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = ClassAttributes<T> & E;
 
 `ClassArttibutes` 는 `RefAttributes` 를 상속하고 있었고 걸국 `ref.current`의 타입을 추론하기 위해 HTML이 동작할 수 있는 Props를 받고 있다고 어느정도 유추할 수 있다.
 
-다시 본론으로 돌아와서, 4338 ~ 4518 라인까지 타입이 정의되어 있었는데 여기서 촉이 왔다. 아, 이 타입을 끌어다쓰니 컴파일 속도에 지장이 갈 수 밖에 없겠구나..!
+다시 본론으로 돌아와서, **4338 ~ 4518** 라인까지 타입이 정의되어 있었는데 여기서 촉이 왔다. 아, 이 타입을 끌어다쓰니 컴파일 속도에 지장이 갈 수 밖에 없겠구나..!
 
 그니까, React에서 내부적으로 사용하는 타입이지 컴포넌트를 정의할 때 사용하기엔 적합하지 않은 타입이였던 것이다.
 
@@ -76,5 +76,5 @@ type FlexProps<K extends React.ElementType = 'div'> = React.ComponentPropsWithou
 
 ### 마무리하며
 
-사내에서 사용하고 있는 `Icon` 컴포넌트는 svg 컴포넌트를 모두 import해서 끌어오고 있는데 트리쉐이킹이 전혀 되지 않는다. 그래서 위처럼 컴파일 속도가 심각하게 느리다.
+추가로 사내에서 사용하고 있는 `Icon` 컴포넌트는 svg 컴포넌트를 모두 import해서 끌어오고 있는데 트리쉐이킹이 전혀 되지 않는다. 그래서 `Flex` 처럼 컴파일 속도가 심각하게 느리다.
 이 문제는 타입 수정이 아닌 다른 방법으로 접근해야 하지만, 해결하게 되면 다음 포스팅으로 찾아보는 걸로 하겠다..!
