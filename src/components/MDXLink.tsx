@@ -1,3 +1,5 @@
+'use client';
+
 import { Link as NextLink } from '@chakra-ui/next-js';
 import { type AnchorHTMLAttributes } from 'react';
 

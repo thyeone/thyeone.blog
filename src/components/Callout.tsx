@@ -1,11 +1,9 @@
 'use client';
 
 import { Box, Flex, Icon, Stack, Text } from '@chakra-ui/react';
-import { CircleAlertIcon, CircleCheckBigIcon, InfoIcon } from 'lucide-react';
-import { title } from 'process';
+import { CircleCheckBigIcon, InfoIcon } from 'lucide-react';
 import React from 'react';
 import { IoWarningOutline } from 'react-icons/io5';
-import { MdCheckCircleOutline } from 'react-icons/md';
 
 type CalloutProps = {
   type: 'info' | 'warning' | 'success';
