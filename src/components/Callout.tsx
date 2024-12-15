@@ -51,13 +51,13 @@ export default function Callout({ type, title, children }: CalloutProps) {
     <Stack bg={colors.bg} borderLeft={`5px solid`} borderColor={colors.border} borderRadius='md' p='4' display='flex'>
       <Flex align='center' gap={1}>
         <Flex justify='center' align='center' bg={colors.bg}>
-          <Icon as={IconComponent} color={colors.icon} boxSize='20px' />
+          <Icon as={IconComponent} color={colors.icon} width={18} height={18} />
         </Flex>
-        <Text m='0px !important' color={colors.title} fontSize='18px !important' fontWeight='bold !important'>
+        <Text m='0px !important' color={colors.title} fontSize='16px !important' fontWeight='bold !important'>
           {title}
         </Text>
       </Flex>
-      <Box color={colors.content}>{children}</Box>
+      {children && <Box color={colors.content}>{children}</Box>}
     </Stack>
   );
 }

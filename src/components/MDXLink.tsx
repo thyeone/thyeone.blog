@@ -25,7 +25,7 @@ const MDXLink = ({ href, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) =>
     );
   }
 
-  return <a target='_blank' rel='noopener noreferrer' href={href} {...props} className='text-blue-500' />;
+  return <a target='_blank' rel='noopener noreferrer' href={href} {...props} />;
 };
 
 export default MDXLink;

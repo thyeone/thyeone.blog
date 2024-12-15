@@ -1,11 +1,9 @@
 'use client';
 
-import { cn } from '@/lib/cn';
-import { List, ListItem, Tab, TabIndicator, TabList, Tabs } from '@chakra-ui/react';
-import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import ChakraMotion from './ChakraMotion';
 import { Link } from '@chakra-ui/next-js';
+import { List, ListItem } from '@chakra-ui/react';
+import { usePathname } from 'next/navigation';
+import ChakraMotion from './ChakraMotion';
 
 const nav_links = [
   {
@@ -31,6 +29,7 @@ export default function NavTabs() {
             fontSize='sm'
             href={href}
             color={isActive(href) ? 'white' : 'gray.600'}
+            textDecoration='none'
             _dark={{
               color: isActive(href) ? 'white' : 'gray.600',
               _hover: {
