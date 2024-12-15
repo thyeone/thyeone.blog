@@ -19,8 +19,8 @@ export default function Post({ post }: PostProps) {
         </Text>
         <span className='mt-16 text-xs text-gray-500'>{dayjs(date).format('YYYY년 MM월 DD일')}</span>
       </div>
-      <div className='relative rounded-10 phone:rounded-12 shrink-0 w-full h-180 phone:w-130 phone:h-90 overflow-hidden'>
-        {thumbnail && (
+      {thumbnail && (
+        <div className='relative rounded-10 phone:rounded-12 shrink-0 w-full h-180 phone:w-130 phone:h-90 overflow-hidden'>
           <Image
             src={thumbnail}
             fill
@@ -28,8 +28,8 @@ export default function Post({ post }: PostProps) {
             objectFit='cover'
             className='group-hover:scale-110 duration-300 transition-transform'
           />
-        )}
-      </div>
+        </div>
+      )}
     </Link>
   );
 }
