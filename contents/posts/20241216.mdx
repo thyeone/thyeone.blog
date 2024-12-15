@@ -1,0 +1,80 @@
+---
+title: IDE 컴파일을 느리게 만들었던 내장 타입
+description: JSX.IntrinsicElements 타입을 알아보자
+date: 2024-12-16
+thumbnail: /posts/20241216.png
+---
+
+### 문제 발단
+
+`Flex` 컴포넌트를 사용하는데 props에 대한 **자동완성**이 심각하게 느렸다. 체감 상 **7-8초**정도 걸렸던 것 같다.
+
+어차피 `Flex` 컴포넌트에 들어있는 타입들은 이미 다 알기 때문에 자동완성이 뜰 때까지 기다리지 않아도 된다. 하지만, 내 감에 의존해서 작성하다보면 오타가 나기 마련이다.
+이건 그렇다 쳐도, 같은 파일 내에서 import 해오는 컴포넌트 마저 느려지게 하는 영향을 끼쳤다.
+
+아시다시피 `Flex`는 정말 많이 사용되는 Layout 컴포넌트다. 개발 생산성을 위해 사용되는 컴포넌트인데, 원인도 모른 채 불편함을 겪으면서 사용할 수는 없었다. 원인을 찾아보는 수밖에..!
+
+작성된 Flex 소스코드를 보니 `JSX.IntrinsicElements` 라는 React 타입을 상속받고 있었다.
+
+```tsx
+type FlexProps<K extends React.ElementType = 'div'> = React.JSX.IntrinsicElements[K] & {
+  as?: K;
+};
+
+const Flex = <K extends React.ElementType = 'div'>({ as, children, ...props }: FlexProps<K>, ref) => {};
+```
+
+평소엔 안 보였는데, 개발에 대한 여유가 생겨서인지 해당 타입이 어떤 것을 내장하고 있는지 궁금증이 생겼다.
+
+### JSX.IntrinsicElements 타입 뜯어보기
+
+```ts
+interface IntrinsicElements {
+  // HTML
+  a: React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
+  abbr: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+  address: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+  area: React.DetailedHTMLProps<React.AreaHTMLAttributes<HTMLAreaElement>, HTMLAreaElement>;
+  article: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+  aside: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+  audio: React.DetailedHTMLProps<React.AudioHTMLAttributes<HTMLAudioElement>, HTMLAudioElement>;
+  b: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+  base: React.DetailedHTMLProps<React.BaseHTMLAttributes<HTMLBaseElement>, HTMLBaseElement>;
+  bdi: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+  bdo: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+  big: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+  /*
+   * ... 생략
+   */
+}
+```
+
+모든 HTML 태그에 대한 타입이 정의되어 있었다..😱
+
+`React.DetailedHTMLProps`의 타입은 다음과 같이 정의되어 있다.
+
+```ts
+type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = ClassAttributes<T> & E;
+```
+
+`ClassArttibutes` 는 `RefAttributes` 를 상속하고 있었고 걸국 `ref.current`의 타입을 추론하기 위해 HTML이 동작할 수 있는 Props를 받고 있다고 어느정도 유추할 수 있다.
+
+다시 본론으로 돌아와서, 4338 ~ 4518 라인까지 타입이 정의되어 있었는데 여기서 촉이 왔다. 아, 이 타입을 끌어다쓰니 컴파일 속도에 지장이 갈 수 밖에 없겠구나..!
+
+그니까, React에서 내부적으로 사용하는 타입이지 컴포넌트를 정의할 때 사용하기엔 적합하지 않은 타입이였던 것이다.
+
+그래서 타입을 평소에도 아주 잘 사용하고 있던 `React.ComponentPropsWithoutRef`로 대체했다.
+
+```ts
+type FlexProps<K extends React.ElementType = 'div'> = React.ComponentPropsWithoutRef<K> & {
+  as?: K;
+};
+```
+
+바꾸고 나서, 앞에 말했던 문제들이 싹 사라졌다. **7-8**초 걸리던 자동완성이 1초, 정말 길어야 2초까지..!! 정말 쾌적해졌다 !
+
+### 마무리하며
+
+사내에서 사용하고 있는 `Icon` 컴포넌트는 svg 컴포넌트를 모두 import해서 끌어오고 있는데 트리쉐이킹이 전혀 되지 않는다. 그래서 위처럼 컴파일 속도가 심각하게 느리다.
+이 문제는 타입 수정이 아닌 다른 방법으로 접근해야 하지만, 해결하게 되면 다음 포스팅으로 찾아보는 걸로 하겠다..!
