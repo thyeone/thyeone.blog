@@ -4,7 +4,7 @@ import { fadeIn } from '@/constants/motions';
 import { getPostList } from '@/lib/post';
 import GitHub from '@/svgs/GitHub';
 import Resume from '@/svgs/Resume';
-import { Divider, Flex, Stack, Tooltip } from '@chakra-ui/react';
+import { Button, Divider, Flex, Link, Stack, Tooltip } from '@chakra-ui/react';
 import Image from 'next/image';
 
 export default async function Home() {
@@ -48,12 +48,33 @@ export default async function Home() {
         </Stack>
       </Flex>
       <Divider className='my-24' />
-      <p className='font-bold text-xl'>최근 포스트</p>
+      <Flex align='center' justify='space-between'>
+        <p className='font-bold text-xl'>최근 포스트</p>
+      </Flex>
       <Stack marginTop={2}>
         {postList.slice(0, 3).map((post, index) => (
           <Post key={index} post={post} />
         ))}
       </Stack>
+      <Link
+        href='/posts'
+        display='flex'
+        justifyContent='center'
+        textDecoration='none'
+        mt={6}
+        _hover={{
+          textDecoration: 'none',
+        }}
+      >
+        <Button
+          width={{
+            base: '100%',
+            lg: 'fit-content',
+          }}
+        >
+          모든 포스트 보기
+        </Button>
+      </Link>
     </ChakraMotion>
   );
 }
