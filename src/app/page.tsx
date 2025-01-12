@@ -4,7 +4,8 @@ import { fadeIn } from '@/constants/motions';
 import { getPostList } from '@/lib/post';
 import GitHub from '@/svgs/GitHub';
 import Resume from '@/svgs/Resume';
-import { Button, Divider, Flex, Link, Stack, Tooltip } from '@chakra-ui/react';
+import { Button, Divider, Flex, Stack, Tooltip } from '@chakra-ui/react';
+import Link from 'next/link';
 import Image from 'next/image';
 
 export default async function Home() {
@@ -56,16 +57,7 @@ export default async function Home() {
           <Post key={index} post={post} />
         ))}
       </Stack>
-      <Link
-        href='/posts'
-        display='flex'
-        justifyContent='center'
-        textDecoration='none'
-        mt={6}
-        _hover={{
-          textDecoration: 'none',
-        }}
-      >
+      <Link href='/posts' className='flex justify-center mt-6'>
         <Button
           width={{
             base: '100%',
