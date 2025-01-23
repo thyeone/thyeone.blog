@@ -33,7 +33,11 @@ export default async function Home() {
               Frontend Developer
             </Text>
           </Flex>
-          <Text fontSize="15px" fontWeight={500} mt="8px">
+          <Text
+            fontSize={{ base: "11px", md: "15px" }}
+            fontWeight={500}
+            mt={{ base: "4px", md: "8px" }}
+          >
             시간이 지나도 값지고 부끄럽지 않은 기록이기를
           </Text>
           <Flex className="mt-auto gap-8">
