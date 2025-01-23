@@ -37,8 +37,9 @@ export default async function Home() {
             fontSize={{ base: "11px", md: "15px" }}
             fontWeight={500}
             mt={{ base: "4px", md: "8px" }}
+            mb="6px"
           >
-            시간이 지나도 값지고 부끄럽지 않은 기록이기를
+            시간이 흘러서 보더라도 값진 기록이길
           </Text>
           <Flex className="mt-auto gap-8">
             <Tooltip label="GitHub" hasArrow>
