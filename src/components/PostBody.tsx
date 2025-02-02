@@ -17,7 +17,25 @@ export default function PostBodyMDX({ content }: { content: Post['content'] }) {
         components={components}
         options={{
           mdxOptions: {
-            rehypePlugins: [[rehypePrettyCode]],
+            rehypePlugins: [
+              [
+                rehypePrettyCode,
+                {
+                  keepBackground: true,
+                  theme: 'github-dark',
+                  onVisitLine(node: any) {
+                    if (node.line) {
+                      node.properties.className = ['line'];
+                    }
+                  },
+                  onVisitHighlightedLine(node: any) {
+                    node.properties.className = ['line', 'highlighted'];
+                  },
+                  grid: true,
+                  showCopyButton: true,
+                },
+              ],
+            ],
           },
         }}
       />

@@ -174,7 +174,7 @@ generateSvgComponents();
 4. 컴포넌트를 생성한 다음 prettier를 통해 포맷팅을 진행합니다.
 5. index.ts 배럴 파일에 export 구문을 추가합니다.
 
-```tsx
+```tsx {4, 12}
 import { forwardRef } from 'react';
 import * as Icons from './icons';
 
@@ -219,7 +219,7 @@ export default function App() {
 
 [@svgr/plugin-prettier](https://github.com/gregberge/svgr/blob/main/packages/plugin-prettier/src/index.ts)를 통해 포맷팅을 적용하려고 했는데, 해당 플러그인은 ESModule만을 지원했기 때문에 약간의 어려움이 있었습니다. 처음에는 `@svgr/plugin-prettier` 플러그인을 통해 포맷팅을 적용하려고 했습니다. 내부 코드를 보니, 현재 workspace에 존재하는 `prettierrc` 파일을 찾아 포맷팅을 적용하는 과정을 거치고 있었습니다.
 
-```json
+```json {3}
 {
   "semi": false,
   "plugins": ["prettier-plugin-tailwindcss"]
@@ -230,7 +230,7 @@ export default function App() {
 
 따라서, 이와 같이 직접 prettier를 import하여 직접 포맷팅을 적용하는 방식으로 해결할 수 있었습니다.
 
-```ts
+```ts {1}
 const prettier = await import('prettier');
 const formattedCode = await prettier.format(componentCode, {
   parser: 'typescript',
