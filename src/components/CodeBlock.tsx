@@ -1,8 +1,9 @@
 'use client';
 
-import { Button, Icon, Text, useToast } from '@chakra-ui/react';
+import { Button, Icon, Text } from '@chakra-ui/react';
 import { ClipboardCheckIcon, ClipboardIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { toast } from './Toaster';
 
 const LANGUAGE_MAP = {
   tsx: 'typescript',
@@ -18,8 +19,6 @@ const CodeBlock = ({
 }) => {
   const codeRef = useRef<HTMLPreElement>(null);
 
-  const toast = useToast();
-
   const [copied, setCopied] = useState(false);
 
   const language = props['data-language'];
@@ -31,14 +30,14 @@ const CodeBlock = ({
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-      toast({
-        title: '코드를 복사했어요.',
-        status: 'success',
+      toast.show({
+        type: 'success',
+        text: '코드를 복사했어요.',
       });
     } catch (e) {
-      toast({
-        title: '코드를 복사하는데 실패했어요.',
-        status: 'error',
+      toast.show({
+        type: 'fail',
+        text: '코드를 복사하는데 실패했어요.',
       });
     }
   };
