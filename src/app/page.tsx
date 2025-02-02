@@ -16,7 +16,7 @@ export default async function Home() {
       <Flex className='gap-16 py-24'>
         <div className='overflow-hidden rounded-10 aspect-square size-100 phone:size-130 relative'>
           <Image
-            src='https://avatars.githubusercontent.com/u/48711263?v=4'
+            src='/avatar.png'
             fill
             placeholder='blur'
             alt='avatar'
@@ -33,9 +33,6 @@ export default async function Home() {
               Frontend Developer
             </Text>
           </Flex>
-          <Text fontSize={{ base: '12px', md: '15px' }} fontWeight={500} mt={{ base: '4px', md: '8px' }} mb='6px'>
-            시간이 흘러서 보더라도 값진 기록이길
-          </Text>
           <Flex className='mt-auto gap-8'>
             <Tooltip label='GitHub' hasArrow>
               <a
