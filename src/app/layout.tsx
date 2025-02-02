@@ -3,6 +3,7 @@ import Providers from '@/providers/Providers';
 import { Box } from '@chakra-ui/react';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
   title: 'thyeone.blog',
@@ -37,6 +38,8 @@ export default function RootLayout({
           </Box>
         </Providers>
       </body>
+      <GoogleAnalytics gaId='G-3H73WB419W' />
+      <GoogleTagManager gtmId='GTM-PFNJLKC9' />
     </html>
   );
 }
