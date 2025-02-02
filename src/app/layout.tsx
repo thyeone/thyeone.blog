@@ -26,6 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko' suppressHydrationWarning>
+      <head>
+        <meta name='google-site-verification' content='3dfDj7poerd4EJ_t-PVTuhledlwdWgfc-FpQ_AvMVJE' />
+      </head>
       <body>
         <Providers>
           <Header />
