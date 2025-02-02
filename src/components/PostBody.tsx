@@ -1,12 +1,14 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import Prose from './Prose';
 import rehypePrettyCode from 'rehype-pretty-code';
 import Callout from './Callout';
 import MDXLink from './MDXLink';
+import Prose from './Prose';
+import CodeBlock from './CodeBlock';
 
 const components = {
   Callout,
   MDXLink,
+  pre: CodeBlock,
 };
 
 export default function PostBodyMDX({ content }: { content: Post['content'] }) {
