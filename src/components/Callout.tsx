@@ -36,8 +36,8 @@ const COLOR_MAP = {
       dark: 'blue.100',
     },
     content: {
-      light: 'blue.100',
-      dark: 'blue.900',
+      light: 'blue.900',
+      dark: 'blue.100',
     },
   },
   warning: {
@@ -103,9 +103,11 @@ export default function Callout({ type, title, children }: CalloutProps) {
       p='4'
       display='flex'
     >
-      <Flex align='center' gap={1}>
-        <Flex justify='center' align='center' bg={colors.bg}>
+      <Flex gap={1}>
+        <Flex gap={1}>
           <Icon
+            pos='relative'
+            top='3px'
             as={IconComponent}
             color={colors.icon.light}
             _dark={{
@@ -114,28 +116,33 @@ export default function Callout({ type, title, children }: CalloutProps) {
             width={18}
             height={18}
           />
+          <Text
+            m='0px !important'
+            color={colors.title.light}
+            _dark={{
+              color: colors.title.dark,
+            }}
+            fontSize='16px !important'
+          >
+            {title}
+          </Text>
         </Flex>
-        <Text
-          m='0px !important'
-          color={colors.title.light}
-          _dark={{
-            color: colors.title.dark,
-          }}
-          fontSize='16px !important'
-        >
-          {title}
-        </Text>
+        {children && (
+          <Box
+            color={colors.content.light}
+            _dark={{
+              color: colors.content.dark,
+            }}
+            sx={{
+              p: {
+                margin: '0px !important',
+              },
+            }}
+          >
+            {children}
+          </Box>
+        )}
       </Flex>
-      {children && (
-        <Box
-          color={colors.content.light}
-          _dark={{
-            color: colors.content.dark,
-          }}
-        >
-          {children}
-        </Box>
-      )}
     </Stack>
   );
 }
