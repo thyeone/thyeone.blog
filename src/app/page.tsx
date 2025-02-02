@@ -4,9 +4,9 @@ import { fadeIn } from '@/constants/motions';
 import { getPostList } from '@/lib/post';
 import GitHub from '@/svgs/GitHub';
 import Resume from '@/svgs/Resume';
-import { Button, Divider, Flex, Stack, Text, Tooltip } from '@chakra-ui/react';
-import Link from 'next/link';
+import { Divider, Flex, Stack, Text, Tooltip } from '@chakra-ui/react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default async function Home() {
   const postList = await getPostList('posts');
@@ -58,22 +58,23 @@ export default async function Home() {
       <Divider className='my-24' />
       <Flex align='center' justify='space-between'>
         <p className='font-bold text-xl'>최근 포스트</p>
+        <Link href='/posts'>
+          <Text
+            fontSize='sm'
+            _hover={{
+              opacity: 0.8,
+            }}
+            transition='all 0.15s ease-in-out'
+          >
+            모든 포스트 보기
+          </Text>
+        </Link>
       </Flex>
       <Stack marginTop={2}>
         {postList.slice(0, 3).map((post, index) => (
           <Post key={index} post={post} />
         ))}
       </Stack>
-      <Link href='/posts' className='flex justify-center mt-6'>
-        <Button
-          width={{
-            base: '100%',
-            lg: 'fit-content',
-          }}
-        >
-          모든 포스트 보기
-        </Button>
-      </Link>
     </ChakraMotion>
   );
 }
