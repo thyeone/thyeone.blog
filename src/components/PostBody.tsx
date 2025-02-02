@@ -31,8 +31,6 @@ export default function PostBodyMDX({ content }: { content: Post['content'] }) {
                   onVisitHighlightedLine(node: any) {
                     node.properties.className = ['line', 'highlighted'];
                   },
-                  grid: true,
-                  showCopyButton: true,
                 },
               ],
             ],
