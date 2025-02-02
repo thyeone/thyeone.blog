@@ -1,9 +1,8 @@
 import { getPostList } from '@/lib/post';
 import { MetadataRoute } from 'next';
-import { use } from 'react';
 
-const sitemap = (): MetadataRoute.Sitemap => {
-  const allPost = use(getPostList());
+const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
+  const allPost = await getPostList();
 
   const posts: MetadataRoute.Sitemap = allPost.map((post) => ({
     url: `https://thyeone.blog/${post.slug}/`,
