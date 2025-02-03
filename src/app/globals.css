@@ -1,14 +1,15 @@
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
-@import url('https://fonts.cdnfonts.com/css/jetbrains-mono');
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url("https://fonts.cdnfonts.com/css/jetbrains-mono");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html {
-  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
-    'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', sans-serif;
+  font-family: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   @apply antialiased;
   font-size: 16px;
 }
@@ -32,7 +33,7 @@ ol {
 
 :not(pre) > code::before,
 :not(pre) > code::after {
-  content: '' !important;
+  content: "" !important;
 }
 
 pre {
@@ -41,7 +42,7 @@ pre {
 }
 
 pre [data-line] {
-  font-size: 14px;
+  font-size: 13px;
   padding: 0 16px;
 }
 
