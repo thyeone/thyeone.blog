@@ -4,6 +4,7 @@ import { Box } from '@chakra-ui/react';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import { ColorSchemeScript, mantineHtmlProps } from '@mantine/core';
 
 export const metadata: Metadata = {
   title: 'thyeone.blog',
@@ -26,9 +27,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ko' suppressHydrationWarning>
+    <html lang='ko' {...mantineHtmlProps}>
       <head>
         <meta name='google-site-verification' content='3dfDj7poerd4EJ_t-PVTuhledlwdWgfc-FpQ_AvMVJE' />
+        <ColorSchemeScript defaultColorScheme='dark' />
       </head>
       <body>
         <Providers>
