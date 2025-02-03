@@ -12,7 +12,7 @@ const MDXLink = ({
   const isAnchorLink = href && href.startsWith("#");
 
   if (isInternalLink || isMDXLink) {
-    return <NextLink target="_blank" href={href} {...props} />;
+    return <NextLink href={href} {...props} />;
   }
 
   if (isAnchorLink) {
