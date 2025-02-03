@@ -10,7 +10,7 @@ thumbnail: /posts/20250202.webp
 하지만, 다음과 같은 다소 불편한 점들이 있었습니다.
 
 1. Inline 형태의 React Component만 만들어주는 것이 아니기 때문에, 처음 프로젝트를 init한 후 새로운 아이콘이 추가되었을 때 플러그인은 무용지물이 됩니다. (즉, 일회용)
-2. 위의 플러그인은 Icon 컴포넌트에 아이콘을 한 곳에 모두 import하고 `ts-pattern` 으로 return하는 구조입니다. 현재 import하는 아이콘이 540개인데, **트리쉐이킹**이 되지 않아 Icon 컴포넌트를 import 했을 때 타입 추론이 매우 느려지는 불편함이 있었습니다.
+2. 위의 플러그인은 Icon 컴포넌트에 아이콘을 한 곳에 모두 import하고 `ts-pattern` 으로 return하는 구조입니다. 현재 import하는 아이콘이 540개인데, **트리쉐이킹**이 되지 않아 Icon 컴포넌트를 import 했을 때 타입 추론이 매우 느려지는 불편함이 있었습니다. (+ 번들사이즈 증가)
 
 저는 새로운 아이콘이 추가될 때마다 Figma에서 아이콘의 svg 코드를 복사한 후 React Component를 직접 작성하는 과정을 반복했습니다. 이 과정을 반복할 때마다 매우 비효율적인 일이라고 느껴졌고 시간이 너무 아까웠습니다.
 
@@ -29,33 +29,37 @@ thumbnail: /posts/20250202.webp
 
 이렇게 하면 로컬에서 svg를 복붙하는 과정 없이 아이콘을 추가할 수 있습니다. 더 나아가면, 디자이너가 개발자에게 "새로운 아이콘이 추가되었어요." 라는 커뮤니케이션 조차 생략할 수 있게 돼요.
 
-<Callout type='warning'>
-  **100개 이상**의 파일을 선택했을 때 커밋을 생성하는 속도가 너무 느려 **Timeout**이 발생하거나, **Bitbucket API**에서
-  허용하는 Content-length를 초과하여 에러가 발생하는 문제가 있었습니다. 이럴 때는 직접 로컬에서 svg를 내보내기 해야
-  했습니다.
+<Callout type="warning">
+  **100개 이상**의 파일을 선택했을 때 커밋을 생성하는 속도가 너무 느려
+  **Timeout**이 발생하거나, **Bitbucket API**에서 허용하는 Content-length를
+  초과하여 에러가 발생하는 문제가 있었습니다. 이럴 때는 직접 로컬에서 svg를
+  내보내기 해야 했습니다.
 </Callout>
 
 ### 스크립트 개발
 
-<Callout type='info'>
-  하지만, 위 플러그인은 원하는 디렉토리에 svg 파일만 추가해줍니다. 원하는 Inline 형태의 React Component로 사용하기
-  위해서는 스크립트를 개발해야 했습니다.
+<Callout type="info">
+  하지만, 위 플러그인은 원하는 디렉토리에 svg 파일만 추가해줍니다. 원하는 Inline
+  형태의 React Component로 사용하기 위해서는 스크립트를 개발해야 했습니다.
 </Callout>
 
 [@svgr/core](https://react-svgr.com/docs/node-api/) 모듈을 사용하여 스크립트를 간편하게 작성할 수 있었습니다. [소스 코드](https://github.com/thyeone/svgr-transform)
 
 ```ts
-import { transform } from '@svgr/core';
-import { program } from 'commander';
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import { transform } from "@svgr/core";
+import { program } from "commander";
+import * as fs from "fs/promises";
+import * as path from "path";
 
-const SVG_DIR = path.join(process.cwd(), 'public/svgs');
-const COMPONENT_DIR = path.join(process.cwd(), 'src/components/common/icons/svgs');
+const SVG_DIR = path.join(process.cwd(), "public/svgs");
+const COMPONENT_DIR = path.join(
+  process.cwd(),
+  "src/components/common/icons/svgs"
+);
 
 program
-  .option('-c, --current-color', 'SVG 색상을 currentColor로 변환')
-  .option('-f, --force', '기존 파일 덮어쓰기')
+  .option("-c, --current-color", "SVG 색상을 currentColor로 변환")
+  .option("-f, --force", "기존 파일 덮어쓰기")
   .parse(process.argv);
 
 const options = program.opts();
@@ -65,21 +69,21 @@ async function generateSvgComponents() {
     await fs.mkdir(COMPONENT_DIR, { recursive: true });
 
     const files = await fs.readdir(SVG_DIR);
-    const svgFiles = files.filter((file) => file.endsWith('.svg'));
+    const svgFiles = files.filter((file) => file.endsWith(".svg"));
 
     const componentNames: string[] = [];
 
     for (const file of svgFiles) {
       const componentName = path
-        .basename(file, '.svg')
-        .replace(/[^a-zA-Z0-9-]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '')
-        .split('-')
+        .basename(file, ".svg")
+        .replace(/[^a-zA-Z0-9-]/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "")
+        .split("-")
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join('');
+        .join("");
 
-      const svgContent = await fs.readFile(path.join(SVG_DIR, file), 'utf-8');
+      const svgContent = await fs.readFile(path.join(SVG_DIR, file), "utf-8");
 
       const componentPath = path.join(COMPONENT_DIR, `${componentName}.tsx`);
 
@@ -89,22 +93,24 @@ async function generateSvgComponents() {
         .catch(() => false);
 
       if (fileExists && !options.force) {
-        console.log(`⚠️ ${componentName} 컴포넌트가 이미 존재합니다. 건너뜁니다.`);
+        console.log(
+          `⚠️ ${componentName} 컴포넌트가 이미 존재합니다. 건너뜁니다.`
+        );
         continue;
       }
 
       const componentCode = await transform(
         svgContent,
         {
-          plugins: ['@svgr/plugin-svgo', '@svgr/plugin-jsx'],
+          plugins: ["@svgr/plugin-svgo", "@svgr/plugin-jsx"],
           typescript: true,
-          exportType: 'named',
-          jsxRuntime: 'automatic',
+          exportType: "named",
+          jsxRuntime: "automatic",
           namedExport: componentName,
           svgoConfig: {
             plugins: [
               {
-                name: 'convertColors',
+                name: "convertColors",
                 params: {
                   currentColor: options.currentColor,
                 },
@@ -117,49 +123,58 @@ async function generateSvgComponents() {
         }
       );
 
-      const prettier = await import('prettier');
+      const prettier = await import("prettier");
       const formattedCode = await prettier.format(componentCode, {
-        parser: 'typescript',
+        parser: "typescript",
         semi: false,
         singleQuote: true,
-        trailingComma: 'all',
+        trailingComma: "all",
         plugins: [],
       });
 
-      await fs.writeFile(path.join(COMPONENT_DIR, `${componentName}.tsx`), formattedCode);
+      await fs.writeFile(
+        path.join(COMPONENT_DIR, `${componentName}.tsx`),
+        formattedCode
+      );
 
       componentNames.push(componentName);
     }
 
-    const indexPath = path.join(COMPONENT_DIR, 'index.ts');
-    let existingContent = '';
+    const indexPath = path.join(COMPONENT_DIR, "index.ts");
+    let existingContent = "";
 
     try {
-      existingContent = await fs.readFile(indexPath, 'utf-8');
+      existingContent = await fs.readFile(indexPath, "utf-8");
     } catch {
-      existingContent = '';
+      existingContent = "";
     }
 
     if (!componentNames.length) {
-      console.log('⚠️ 생성할 아이콘이 없습니다. 종료합니다.');
+      console.log("⚠️ 생성할 아이콘이 없습니다. 종료합니다.");
       return;
     }
 
-    const exportStatements = componentNames.map((name) => `export { ${name} } from './${name}'`).join('\n');
+    const exportStatements = componentNames
+      .map((name) => `export { ${name} } from './${name}'`)
+      .join("\n");
 
-    const existingExports = existingContent.split('\n').filter(Boolean);
-    const newExports = exportStatements.split('\n').filter((line) => !existingExports.includes(line));
+    const existingExports = existingContent.split("\n").filter(Boolean);
+    const newExports = exportStatements
+      .split("\n")
+      .filter((line) => !existingExports.includes(line));
 
     if (newExports.length > 0) {
-      const updatedContent = [...existingExports, ...newExports, ''].join('\n');
+      const updatedContent = [...existingExports, ...newExports, ""].join("\n");
 
       await fs.writeFile(indexPath, updatedContent);
-      console.log(`${componentNames.map((name) => `✅ ${name} 추가됨`).join('\n')}`);
+      console.log(
+        `${componentNames.map((name) => `✅ ${name} 추가됨`).join("\n")}`
+      );
     }
 
-    console.log('✅ SVG 컴포넌트 생성 완료!');
+    console.log("✅ SVG 컴포넌트 생성 완료!");
   } catch (error) {
-    console.error('에러 발생:', error);
+    console.error("에러 발생:", error);
   }
 }
 
@@ -168,15 +183,15 @@ generateSvgComponents();
 
 위부터 차례대로 흐름을 대략적으로 읊어보겠습니다.
 
-1. 스크립트에 currentColor 옵션이 있는지 확인합니다. currentColor 옵션이 있다면 `@svgr` 의 `transform` 모듈에서 currentColor로 변환하는 과정을 거칩니다.
+1. 스크립트에 currentColor 옵션이 있는지 확인합니다. currentColor 옵션이 있다면 `@svgr`의 `transform` 모듈에서 currentColor로 변환하는 과정을 거칩니다.
 2. 파일 이름에 특수문자가 있다면 모두 대시(-)로 치환하고 컴포넌트 이름을 PascalCase로 변환합니다.
 3. 이미 컴포넌트가 존재하는지 확인하고 존재하지 않는다면 컴포넌트를 생성합니다.
 4. 컴포넌트를 생성한 다음 prettier를 통해 포맷팅을 진행합니다.
 5. index.ts 배럴 파일에 export 구문을 추가합니다.
 
 ```tsx {4, 12}
-import { forwardRef } from 'react';
-import * as Icons from './icons';
+import { forwardRef } from "react";
+import * as Icons from "./icons";
 
 type IconName = keyof typeof Icons;
 
@@ -185,7 +200,7 @@ type IconProps = React.SVGProps<SVGSVGElement> & {
 };
 
 function Icon(props: IconProps, ref: React.Ref<SVGSVGElement>) {
-  const { name, width = 24, height = 24, fill = 'none', ...rest } = props;
+  const { name, width = 24, height = 24, fill = "none", ...rest } = props;
   const IconElement = Icons[name];
 
   return (
@@ -209,7 +224,7 @@ export default forwardRef(Icon);
 
 ```tsx
 export default function App() {
-  return <Icon name='IconName' />;
+  return <Icon name="IconName" />;
 }
 ```
 
@@ -231,20 +246,20 @@ export default function App() {
 따라서, 이와 같이 직접 prettier를 import하여 직접 포맷팅을 적용하는 방식으로 해결할 수 있었습니다.
 
 ```ts {1}
-const prettier = await import('prettier');
+const prettier = await import("prettier");
 const formattedCode = await prettier.format(componentCode, {
-  parser: 'typescript',
+  parser: "typescript",
   semi: false,
   singleQuote: true,
-  trailingComma: 'all',
+  trailingComma: "all",
   plugins: [],
 });
 ```
 
 ### 마치며
 
-개발자에게는 **귀찮음**과 **개선 욕구** 두 가지가 동시에 가져야 할 소양이라고 생각되는 것 같습니다. 피그마에서 SVG를 복사해 React Component를 만들고 이러한 반복적인 단순 작업은 어찌보면 당연한 과정으로 생각할 수 있습니다.
+개발자에게는 **불편함**과 그것을 **개선하려는 욕구** 두 가지가 동시에 가져야 할 소양이라고 생각되는 것 같습니다.
 
-하지만, **"이 프로세스를 어떻게 하면 개선할 수 있을까?"** 라는 의식과 고민을 하게 됨으로써 플러그인과 스크립트를 통해 생산성을 한 층 더 높여질 수 있게 되었고 개인적으로도 성장할 수 있었던 것 같습니다.
+피그마에서 SVG를 복사해 React Component를 만들고 이러한 반복적인 단순 작업은 어찌보면 당연한 과정으로 생각할 수 있습니다. 하지만, **"개발환경을 어떻게 하면 개선할 수 있을까?"** 라는 의식과 고민을 하게 됨으로써 플러그인과 스크립트를 통해 생산성을 한 층 더 높여질 수 있게 되었고 개인적으로도 성장할 수 있었던 것 같습니다.
 
-이번 기회를 통해서 자동화에 대해 많은 관심이 생긴 계기도 된 것 같습니다. 항상 **DX**에 관심이 많았지만 코드적으로만 접근할 생각만 했는데 새로운 방식으로도 접근할 수 있었던 것 같습니다.
+이번 기회를 통해서 **자동화**에 대해 많은 관심이 생긴 계기도 된 것 같습니다. 항상 **DX**에 관심이 많았지만 코드적으로만 접근할 생각만 했는데 새로운 방식으로도 접근할 수 있었던 것 같습니다.
