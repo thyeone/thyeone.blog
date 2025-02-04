@@ -12,42 +12,42 @@ export default async function Home() {
   const postList = await getPostList('posts');
 
   return (
-    <ChakraMotion variants={fadeIn} initial='hidden' animate='visible'>
-      <Flex className='gap-16 py-24'>
-        <div className='overflow-hidden rounded-10 aspect-square size-100 phone:size-130 relative'>
+    <ChakraMotion variants={fadeIn} initial="hidden" animate="visible">
+      <Flex gap="16px" py="24px" className="gap-16 py-24">
+        <div className="overflow-hidden rounded-10 aspect-square size-100 phone:size-130 relative">
           <Image
-            src='/avatar.png'
+            src="/avatar.png"
             fill
-            placeholder='blur'
-            alt='avatar'
-            objectFit='cover'
-            blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII='
+            placeholder="blur"
+            alt="avatar"
+            objectFit="cover"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII="
           />
         </div>
         <Stack gap={0}>
-          <Flex gap='6px'>
-            <Text fontSize='x-large' fontWeight={700}>
+          <Flex gap="6px">
+            <Text fontSize="x-large" fontWeight={700}>
               김태현
             </Text>
-            <Text pos='relative' top='13px' fontSize='small' fontWeight={500}>
+            <Text pos="relative" top="13px" fontSize="small" fontWeight={500}>
               Frontend Developer
             </Text>
           </Flex>
-          <Flex className='mt-auto gap-8'>
-            <Tooltip label='GitHub' hasArrow>
+          <Flex className="mt-auto gap-8">
+            <Tooltip label="GitHub" hasArrow>
               <a
-                href='https://github.com/thyeone'
-                target='_blank'
-                className='rounded p-1 transition duration-300 hover:bg-[rgba(0,0,0,0.08)]'
+                href="https://github.com/thyeone"
+                target="_blank"
+                className="rounded p-1 transition duration-300 hover:bg-[rgba(0,0,0,0.08)]"
               >
                 <GitHub />
               </a>
             </Tooltip>
-            <Tooltip label='Resume' hasArrow>
+            <Tooltip label="Resume" hasArrow>
               <a
-                href='https://drive.google.com/file/d/1-ZDkotRA7pn2B_EAS3mH9vwdhA9BLqW0/view'
-                target='_blank'
-                className='rounded p-1 transition duration-300 hover:bg-[rgba(0,0,0,0.08)]'
+                href="https://drive.google.com/file/d/1-ZDkotRA7pn2B_EAS3mH9vwdhA9BLqW0/view"
+                target="_blank"
+                className="rounded p-1 transition duration-300 hover:bg-[rgba(0,0,0,0.08)]"
               >
                 <Resume />
               </a>
@@ -55,16 +55,16 @@ export default async function Home() {
           </Flex>
         </Stack>
       </Flex>
-      <Divider className='my-24' />
-      <Flex align='center' justify='space-between'>
-        <p className='font-bold text-xl'>최근 포스트</p>
-        <Link href='/posts'>
+      <Divider my="24px" />
+      <Flex align="center" justify="space-between">
+        <p className="font-bold text-xl">최근 포스트</p>
+        <Link href="/posts">
           <Text
-            fontSize='sm'
+            fontSize="sm"
             _hover={{
               opacity: 0.8,
             }}
-            transition='all 0.15s ease-in-out'
+            transition="all 0.15s ease-in-out"
           >
             모든 포스트 보기
           </Text>
