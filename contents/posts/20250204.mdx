@@ -50,17 +50,23 @@ thumbnail: /posts/20250204.webp
 
 ### 1. Context API로 관리하기
 
-저는 위의 문제를 해결하기 위해 `Context API`를 사용해왔습니다. **Provider**로 감싸면 해당 컴포넌트 트리 내에서 전역 상태를 사용할 수 있고 1~4번 문제를 모두 해결할 수 있습니다.
+저는 위의 문제를 해결하기 위해 `Context API`를 사용해왔습니다. **Provider**로 감싸면 해당 컴포넌트 트리 내에서 전역 상태를 사용할 수 있고 1~5번 문제를 모두 해결할 수 있습니다.
 
 ```tsx
 const CountContext = createContext(null);
 
 export const useCount = () => useContext(CountContext);
 
-function CountProvider({ children }: PropsWithChildren) {
-  const [count, setCount] = useState(0);
+function CountProvider({
+  children,
+  count,
+}: PropsWithChildren<{ count: number }>) {
+  const [__count, __setCount] = useState(count);
 
-  const value = useMemo(() => ({ count, setCount }), [count]);
+  const value = useMemo(
+    () => ({ count: __count, setCount: __setCount }),
+    [__count],
+  );
 
   return (
     <CountContext.Provider value={value}>{children}</CountContext.Provider>
