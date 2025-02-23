@@ -7,9 +7,9 @@ thumbnail: /posts/20241215.png
 
 ## 흔히 마주할 수 있는 고민
 
-개발을 하면서 다음과 같은 문제를 수도 없이 겪어왔다.
+개발을 하면서 다음과 같은 문제를 많이 겪어왔습니다.
 
-Button 컴포넌트의 동작을 `a`태그로 사용하기 위해 Link를 위치해야 하는 상황이다.
+Button 컴포넌트의 동작을 `a`태그로 사용하기 위해 Link를 위치해야 하는 상황입니다.
 
 ```tsx
 // Case 1
@@ -23,65 +23,168 @@ Button 컴포넌트의 동작을 `a`태그로 사용하기 위해 Link를 위치
 </Button>
 ```
 
-1번 케이스는 `button` 태그 내에 `a` 태그가 위치되어 html 명세에 위반되는 방법이다.
+1번 케이스는 `button` 태그 내에 `a` 태그가 위치되어 html 명세에 위반되는 방법입니다.
 
-2번 케이스처럼 Button 컴포넌트가 다형성 컴포넌트로 구현했다고 해도, 다음과 같이 사용할 수 없다.
-as Props를 `React.ElementType`으로 상속받고 있기 때문이다.
+2번 케이스처럼 Button 컴포넌트가 다형성 컴포넌트로 구현했다고 해도, 위와 같이 사용할 수 없어요.
+as Props를 `React.ElementType`으로 상속받고 있기 때문입니다.
 
 그렇다면 이렇게 하는 건..?
 
 ```tsx
-<Link href='/'>
+<Link href="/">
   <Button>확인</Button>
 </Link>
 ```
 
-Button 컴포넌트의 width가 고정 px이 아닌 `width: 100%`와 같은 속성을 가지고 있을 경우 `Link />` 태그는 inline 속성을 갖고 있어 Link에 의해 width 속성이 무시될 것 이다.
+Button 컴포넌트의 width가 고정 px이 아닌 `width: 100%`와 같은 속성을 가지고 있을 경우 `Link />` 태그는 inline 속성을 갖고 있어 Link에 의해 width 속성이 무시될 것입니다.
 
-또, 불필요한 태그가 늘어날테니 좋지 않은 방법이다.
+또, 불필요한 태그가 늘어날테니 좋지 않은 방법이에요.
 
 ## 렌더 위임, asChild 패턴
 
 위와 같은 문제를 해결하기 위해 Radix UI에서 <MDXLink href='https://www.radix-ui.com/primitives/docs/guides/composition'>asChild</MDXLink>라는 패턴을
-사용하고 있다.
+사용하고 있습니다.
 
 ```tsx
 <Button aschild>
-  <Link href='/'>메인으로 이동하기</Link>
+  <Link href="/">메인으로 이동하기</Link>
 </Button>
 ```
 
-`asChild`가 true라면 Button 컴포넌트의 역할과 동작이 자식 요소로 모두 위임하게 된다.
+`asChild`가 true라면 Button 컴포넌트의 역할과 동작이 자식 요소로 모두 위임하게 됩니다.
 
 ### 내 컴포넌트에 asChild props 추가하기
 
 Radix UI에서는 자식 요소에 병합하기 위한 <MDXLink href='https://www.radix-ui.com/primitives/docs/utilities/slot'>Slot</MDXLink> 컴포넌트를 제공하고 있다.
 
-<Callout type='info' title='이 글에서는 Slot 내부 동작과 코드에 대해 다루지 않습니다.' />
+<Callout
+  type="info"
+  title="이 글에서는 Slot 내부 동작과 코드에 대해 다루지 않습니다."
+/>
 
 1. Radix UI의 <MDXLink href='https://www.radix-ui.com/primitives/docs/utilities/slot'>Slot</MDXLink> 컴포넌트를 install 한다.
 2. asChild Props를 추가하고 true라면 `Slot`를 렌더링한다.
 
-```tsx
-import { Slot } from '@radix-ui/react-slot';
+아래 코드는 개인적으로 작성한 **asChild** 패턴을 결합한 Flex 컴포넌트입니다.
 
-type ButtonProps<T extends React.ElementType = 'button'> = React.ComponentPropsWithoutRef<T> & {
-  as?: T;
-  asChild?: boolean;
+```tsx {62}
+import React, { forwardRef } from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import type {
+  PolymorphicComponentProps,
+  PolymorphicRef,
+} from '../polymorphics';
+import { cva } from 'class-variance-authority';
+
+const flexVariants = cva('flex', {
+  variants: {
+    direction: {
+      row: 'flex-row',
+      col: 'flex-col',
+    },
+    align: {
+      start: 'items-start',
+      center: 'items-center',
+      end: 'items-end',
+    },
+    justify: {
+      start: 'justify-start',
+      center: 'justify-center',
+      end: 'justify-end',
+      between: 'justify-between',
+    },
+    center: {
+      true: 'justify-center items-center',
+    },
+  },
+  defaultVariants: {
+    direction: 'row',
+  },
+});
+
+export type FlexProps<C extends React.ElementType = 'div'> =
+  PolymorphicComponentProps<C> & {
+    component?: C;
+    asChild?: boolean;
+    gap?: number;
+    direction?: 'row' | 'col';
+    center?: boolean;
+    align?: 'start' | 'center' | 'end';
+    justify?: 'start' | 'center' | 'end' | 'between';
+  };
+
+const FlexComponent = <C extends React.ElementType = 'div'>(
+  {
+    as,
+    component,
+    asChild,
+    children,
+    className,
+    direction = 'row',
+    center,
+    align,
+    justify,
+    gap,
+    ...props
+  }: FlexProps<C>,
+  ref: PolymorphicRef<C>,
+) => {
+  const Element = component ?? as ?? 'div';
+
+  const componentProps = {
+    ...(as === 'button' && { type: 'button' }),
+    style: { gap },
+    className: flexVariants({
+      direction,
+      align,
+      justify,
+      center,
+      className,
+    }),
+    ref,
+    ...props,
+  };
+
+  if (asChild) {
+    return (
+      <Slot {...(componentProps as React.HTMLAttributes<HTMLElement>)}>
+        {children}
+      </Slot>
+    );
+  }
+
+  return React.createElement(Element, componentProps, children);
 };
 
-export default function Button<T extends React.ElementType = 'button'>({
-  as,
-  asChild,
-  children,
-  ...rest
-}: PropsWithStrictChildren<ButtonProps<T>>) {
-  const Element = as || 'button';
+export const Flex = forwardRef(FlexComponent) as <
+  C extends React.ElementType = 'div',
+>(
+  props: FlexProps<C> & { ref?: PolymorphicRef<C> },
+) => JSX.Element;
 
-  const Component = asChild ? Slot : Element;
+export const Col = <C extends React.ElementType = 'div'>(
+  props: FlexProps<C>,
+  ref: PolymorphicRef<C>,
+) => <Flex {...props} direction="col" ref={ref} />;
 
-  return <Component {...rest}>{children}</Component>;
-}
+export const Row = <C extends React.ElementType = 'div'>(
+  props: FlexProps<C>,
+  ref: PolymorphicRef<C>,
+) => <Flex {...props} direction="row" ref={ref} />;
 ```
 
-Slot으로 감싸기만 하면 끝이다!
+```tsx
+import Link from 'next/link';
+
+// 1번
+<Flex component={Link} href="/">메인으로 이동하기</Flex>
+
+// 2번
+<Flex asChild>
+  <Link href="/">메인으로 이동하기</Link>
+</Flex>
+```
+
+코드 하이라이팅이 쳐져 있는 부분을 보면, component props를 1순위로 가져가면서 1번처럼 대신 대체할 컴포넌트를 넘겨주는 것도, 2번처럼 자식 요소를 통해 `Link`를 넘겨주는 방법 모두 가능합니다.
+
+하지만, `Slot`에서 2개 이상의 children을 받는 것을 허용하지 않고 있기 때문에, 개인적으로는 **1번 방법**이 더 접근성이 좋았던 것 같아요. 또한, 코드 량도 더 적은 것을 볼 수 있습니다.
