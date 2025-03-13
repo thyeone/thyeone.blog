@@ -11,7 +11,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
 
   return [
     {
-      url: `https://thyeone.blog/`,
+      url: `https://thyeone.blog`,
       lastModified: new Date().toISOString().split('T')[0],
       priority: 1,
     },
