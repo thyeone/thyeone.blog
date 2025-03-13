@@ -5,7 +5,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const allPost = await getPostList();
 
   const posts: MetadataRoute.Sitemap = allPost.map((post) => ({
-    url: `https://thyeone.blog/posts/${post.slug}/`,
+    url: `https://thyeone.blog/posts/${post.slug}`,
     lastModified: new Date(post.date).toISOString().split('T')[0],
   }));
 
